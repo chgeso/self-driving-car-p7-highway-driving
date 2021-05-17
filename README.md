@@ -89,6 +89,7 @@ the path has processed since last time.
 ## Reflection
 
 The key of generating paths is to have a safe region to avoid collision with the front and rear cars. The first thing is you need to recognize which lane the sensed car is. In case of the same lane as you, you only consider the cars in front of you and then keep checking the distance between you and the front car. If the front car is too close, you consider to change the lane on the left or right if it is available. If it could not, you only reduce your speed. When you start to consider to change the lane on the left or right, before the decision to change, you need to get some information about the front and rear cars are in your safe range or not. In this code implementation the left is preferred than the right. In conclusion, when you start to drive in this simulation, the car considers all of things which I mentioned above. Here is the result:   
+
 [image1]: ./image/result.png "The result of my project"
 ![alt text][image1]
 
