@@ -1,4 +1,4 @@
-# CarND-Path-Planning-Project
+# Highway Driving
 Self-Driving Car Engineer Nanodegree Program
    
 ### Simulator.
