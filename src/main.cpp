@@ -65,8 +65,8 @@ int main() {
   // The minimum distance between my car and the front cars to avoid collision.
   int dist_min = 30;
 
-  // Flags to check whether front cars exist in the range to avoid collision.
-  struct FrontCarChk
+  // Flags to check whether near cars exist in the range to avoid collision.
+  struct NearCarChk
   {
     bool leftSide;
     bool frontSide;
@@ -128,8 +128,8 @@ int main() {
           }
 
           bool too_close = false;
-          LanePos front_car_lane_pos;
-          FrontCarChk front_car_chk = {false, false, false};
+          LanePos near_car_lane_pos;
+          NearCarChk near_car_chk = {false, false, false};
 
           // Go through the surrounding vehicles properties
           for(int i = 0; i < sensor_fusion.size(); i++) {
@@ -144,31 +144,31 @@ int main() {
             // Check the front car could cause a collision with my car.
             if (d > 0 && d < lane_width)
             {
-              front_car_lane_pos = LanePos::kFirstLane;
+              near_car_lane_pos = LanePos::kFirstLane;
             } else if ( d > lane_width && d < 2 * lane_width) {
-              front_car_lane_pos = LanePos::kSecondLane;
+              near_car_lane_pos = LanePos::kSecondLane;
             } else if ( d > 2 * lane_width && d < 3 * lane_width ) {
-              front_car_lane_pos = LanePos::kThirdLane;
+              near_car_lane_pos = LanePos::kThirdLane;
             } else { 
-              front_car_lane_pos = LanePos::kOtherSide;
+              near_car_lane_pos = LanePos::kOtherSide;
             }
 
-            if (front_car_lane_pos == static_cast<LanePos>(cur_lane)) {
-              front_car_chk.frontSide = ((check_car_s > car_s) && ((check_car_s-car_s) < dist_min)) ? true : front_car_chk.frontSide;
-            } else if ((front_car_lane_pos == static_cast<LanePos>(cur_lane - 1)) && (front_car_lane_pos != LanePos::kOtherSide)) {
-              front_car_chk.leftSide = (abs(check_car_s-car_s) < dist_min) ? true : front_car_chk.leftSide;
-            } else if (front_car_lane_pos == static_cast<LanePos>(cur_lane + 1)) {
-              front_car_chk.rightSide = (abs(check_car_s-car_s) < dist_min) ? true : front_car_chk.rightSide;
+            if (near_car_lane_pos == static_cast<LanePos>(cur_lane)) {
+              near_car_chk.frontSide = ((check_car_s > car_s) && ((check_car_s-car_s) < dist_min)) ? true : near_car_chk.frontSide;
+            } else if ((near_car_lane_pos == static_cast<LanePos>(cur_lane - 1)) && (near_car_lane_pos != LanePos::kOtherSide)) {
+              near_car_chk.leftSide = (abs(check_car_s-car_s) < dist_min) ? true : near_car_chk.leftSide;
+            } else if (near_car_lane_pos == static_cast<LanePos>(cur_lane + 1)) {
+              near_car_chk.rightSide = (abs(check_car_s-car_s) < dist_min) ? true : near_car_chk.rightSide;
             } else {
               // We don't care this case.
             }
           }
 
           // Behavior Decision!!
-          if (front_car_chk.frontSide) {
-            if ((!front_car_chk.leftSide) && (static_cast<LanePos>(cur_lane) != LanePos::kFirstLane)) {
+          if (near_car_chk.frontSide) {
+            if ((!near_car_chk.leftSide) && (static_cast<LanePos>(cur_lane) != LanePos::kFirstLane)) {
               cur_lane--;
-            } else if ((!front_car_chk.rightSide) && (static_cast<LanePos>(cur_lane) != LanePos::kThirdLane)) {
+            } else if ((!near_car_chk.rightSide) && (static_cast<LanePos>(cur_lane) != LanePos::kThirdLane)) {
               cur_lane++;
             } else {
               too_close = true;

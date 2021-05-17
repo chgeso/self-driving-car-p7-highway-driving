@@ -92,4 +92,11 @@ The key of generating paths is to have a safe region to avoid collision with the
 
 [image1]: ./image/result.png "The result of my project"
 ![alt text][image1]
+   
+For the detail, here is the explanation for my code model.   
+Line 57 ~ 82 : Declaration some parameters for starting lane number, lane width, reference velocity, and the minimum distance to avoid collision. NearCarchk struct type to recognize where is the near car based on your car lane. LanePos enum class type is to indicate where the sensed car is.   
+Line 124 ~ 165 : This code is for checking which sensed car is really in my safe region and where it is based on your car lane. In my case, the safe region is under 30m.  
+Line 167 ~ 187 : This code is for behaviour planning to avoid the collision. There are three choices which are changing the lane on the left, right or reducing the speed of your car.   
+Line 189 ~ 296 : This code is for trajectory generation. First of all, we create a list of widely spaced (x,y) waypoints (i.e. Waypoint Date). According to previous path size, we will decide to use the previous path's endpoint as starting reference or not. And then convert Frenet Coordinates by using getXY function. Finally, we will interpolate by using spline fitting.   
+
 
